@@ -100,6 +100,44 @@ Project_2/
 ## Tech Stack
 
 - **Backend:** Python 3, Flask
-- **Database:** SQLite (SQLAlchemy ORM)
+- **Database:** SQLite locally / PostgreSQL on Render (SQLAlchemy ORM)
 - **Auth:** JWT (PyJWT), OAuth 2.0 (Authlib)
 - **Encryption:** cryptography (Fernet), bcrypt
+
+## Free Deployment (Render)
+
+Deploy at **$0/month** using [Render's free tier](https://render.com/docs/free) (web service + PostgreSQL).
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Shikha-Upadhyay13/Secure-web-application)
+
+### Steps
+
+1. Click **Deploy to Render** above (or go to [Render Blueprints](https://dashboard.render.com/blueprints) → **New Blueprint Instance** → connect GitHub repo `Secure-web-application`).
+2. Render reads `render.yaml` and creates:
+   - Free **Web Service** (Python + Gunicorn)
+   - Free **PostgreSQL** database
+   - Auto-generated `SECRET_KEY`, `JWT_SECRET_KEY`, `FERNET_KEY`
+3. Wait ~3–5 minutes for the first build.
+4. Open your live URL: `https://securevault.onrender.com` (or the name Render assigns).
+
+### After Deploy
+
+| Item | Value |
+|---|---|
+| Admin login | `admin@secureapp.local` / `Admin@12345` |
+| Health check | `https://YOUR-APP.onrender.com/health` |
+
+**Note:** Free tier sleeps after 15 min of inactivity — first visit may take ~30 seconds to wake up.
+
+### Google OAuth (optional on production)
+
+In Render dashboard → **Environment**, add:
+
+- `GOOGLE_CLIENT_ID`
+- `GOOGLE_CLIENT_SECRET`
+
+Then in [Google Cloud Console](https://console.cloud.google.com), add this redirect URI:
+
+```
+https://YOUR-APP.onrender.com/api/auth/oauth/google/callback
+```
