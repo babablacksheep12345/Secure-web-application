@@ -3,186 +3,277 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SecureVault — Secure Web App</title>
+    <title>SecureVault | Enterprise Secure Notes Platform</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="bg-gradient"></div>
-    <div class="bg-grid"></div>
-
-    <nav class="navbar">
-        <div class="nav-brand">
-            <span class="brand-icon">🔐</span>
-            <span>SecureVault</span>
-        </div>
-        <div id="nav-user" class="nav-user hidden">
-            <div class="user-chip">
-                <div class="avatar" id="user-avatar">U</div>
-                <div class="user-meta">
-                    <span id="user-email"></span>
-                    <span id="user-role" class="badge"></span>
+    <!-- ═══ PUBLIC: Login / Register ═══ -->
+    <div id="public-app">
+        <header class="navbar">
+            <div class="nav-brand">
+                <svg class="brand-logo" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <div class="brand-text">
+                    <span class="brand-name">SecureVault</span>
+                    <span class="brand-tag">Enterprise Security</span>
                 </div>
             </div>
-            <button id="logout-btn" class="btn btn-ghost btn-sm">Logout</button>
-        </div>
-    </nav>
+            <div class="nav-status"><span class="status-dot"></span><span>TLS Secured</span></div>
+        </header>
 
-    <main class="container">
-        <!-- Auth Section -->
-        <section id="auth-section" class="auth-layout">
-            <div class="auth-hero">
-                <p class="eyebrow">Enterprise-grade security</p>
-                <h1>Your notes,<br><span class="gradient-text">encrypted & protected</span></h1>
-                <p class="hero-desc">JWT authentication, role-based access, and Fernet encryption keep your data safe.</p>
-                <ul class="feature-list">
-                    <li>Register once, login anytime with the same credentials</li>
-                    <li>End-to-end encrypted note storage</li>
-                    <li>OWASP Top 10 security practices</li>
-                </ul>
+        <main class="container">
+            <section class="auth-layout">
+                <div class="auth-hero">
+                    <div class="trust-badge">OWASP Top 10 Compliant</div>
+                    <h1>Secure document management for modern teams</h1>
+                    <p class="hero-desc">JWT authentication, role-based access control, and Fernet encryption for data at rest.</p>
+                    <ul class="feature-list">
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Register once — sign in anytime with the same credentials</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>SQL injection prevention via SQLAlchemy ORM</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>bcrypt password hashing with policy enforcement</li>
+                    </ul>
+                </div>
+
+                <div class="card auth-card">
+                    <div class="auth-card-header">
+                        <h2>Account Access</h2>
+                        <p class="subtitle">Sign in to your workspace or register a new account</p>
+                    </div>
+                    <div class="tabs">
+                        <button class="tab active" data-tab="login">Sign In</button>
+                        <button class="tab" data-tab="register">Register</button>
+                    </div>
+                    <form id="login-form" class="auth-form">
+                        <div class="form-group">
+                            <label for="login-email">Email</label>
+                            <input type="email" id="login-email" required placeholder="name@company.com" autocomplete="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Password</label>
+                            <div class="input-with-toggle">
+                                <input type="password" id="login-password" required placeholder="Enter password" autocomplete="current-password">
+                                <button type="button" class="toggle-pw" data-target="login-password" aria-label="Toggle password">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <span class="btn-text">Sign In to Dashboard</span>
+                            <span class="btn-spinner hidden"></span>
+                        </button>
+                    </form>
+                    <form id="register-form" class="auth-form hidden">
+                        <div class="form-group">
+                            <label for="reg-email">Email</label>
+                            <input type="email" id="reg-email" required placeholder="name@company.com" autocomplete="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-password">Password</label>
+                            <div class="input-with-toggle">
+                                <input type="password" id="reg-password" required placeholder="Min. 8 characters" autocomplete="new-password">
+                                <button type="button" class="toggle-pw" data-target="reg-password" aria-label="Toggle password">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </div>
+                            <div class="password-strength">
+                                <div class="strength-bar"><div id="strength-fill" class="strength-fill"></div></div>
+                                <span id="strength-label" class="strength-label">Uppercase, lowercase, number &amp; special character required</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <span class="btn-text">Create Account</span>
+                            <span class="btn-spinner hidden"></span>
+                        </button>
+                    </form>
+                    <div class="oauth-section">
+                        <div class="divider"><span>Single Sign-On</span></div>
+                        <a href="/api/auth/oauth/google" class="btn btn-google">
+                            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                            Continue with Google
+                        </a>
+                    </div>
+                    <div id="auth-error" class="alert alert-error hidden"></div>
+                    <div id="auth-success" class="alert alert-success hidden"></div>
+                    <details class="demo-hint">
+                        <summary>Demo admin access</summary>
+                        <p><code>admin@secureapp.local</code> / <code>Admin@12345</code></p>
+                    </details>
+                </div>
+            </section>
+        </main>
+        <footer class="site-footer"><p>&copy; 2026 SecureVault</p></footer>
+    </div>
+
+    <!-- ═══ PRIVATE: Full Dashboard App ═══ -->
+    <div id="dashboard-app" class="hidden">
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <span>SecureVault</span>
             </div>
 
-            <div class="card auth-card">
-                <div class="auth-card-header">
-                    <h2>Welcome back</h2>
-                    <p class="subtitle">Sign in or create a new account</p>
-                </div>
-
-                <div class="tabs">
-                    <button class="tab active" data-tab="login">Login</button>
-                    <button class="tab" data-tab="register">Register</button>
-                </div>
-
-                <form id="login-form" class="auth-form">
-                    <div class="form-group">
-                        <label for="login-email">Email address</label>
-                        <input type="email" id="login-email" required placeholder="you@example.com" autocomplete="email">
-                    </div>
-                    <div class="form-group">
-                        <label for="login-password">Password</label>
-                        <div class="input-with-toggle">
-                            <input type="password" id="login-password" required placeholder="Enter your password" autocomplete="current-password">
-                            <button type="button" class="toggle-pw" data-target="login-password" aria-label="Show password">👁</button>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">
-                        <span class="btn-text">Sign In</span>
-                        <span class="btn-spinner hidden"></span>
-                    </button>
-                </form>
-
-                <form id="register-form" class="auth-form hidden">
-                    <div class="form-group">
-                        <label for="reg-email">Email address</label>
-                        <input type="email" id="reg-email" required placeholder="you@example.com" autocomplete="email">
-                    </div>
-                    <div class="form-group">
-                        <label for="reg-password">Password</label>
-                        <div class="input-with-toggle">
-                            <input type="password" id="reg-password" required placeholder="Create a strong password" autocomplete="new-password">
-                            <button type="button" class="toggle-pw" data-target="reg-password" aria-label="Show password">👁</button>
-                        </div>
-                        <div class="password-strength">
-                            <div class="strength-bar"><div id="strength-fill" class="strength-fill"></div></div>
-                            <span id="strength-label" class="strength-label">Use 8+ chars with upper, lower, number & symbol</span>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">
-                        <span class="btn-text">Create Account</span>
-                        <span class="btn-spinner hidden"></span>
-                    </button>
-                    <p class="register-hint">After registering, you can always sign in with the same email and password.</p>
-                </form>
-
-                <div class="oauth-section">
-                    <div class="divider"><span>or continue with</span></div>
-                    <a href="/api/auth/oauth/google" class="btn btn-google">
-                        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                        Google
-                    </a>
-                </div>
-
-                <div id="auth-error" class="alert alert-error hidden"></div>
-                <div id="auth-success" class="alert alert-success hidden"></div>
-
-                <details class="demo-hint">
-                    <summary>Demo admin credentials</summary>
-                    <code>admin@secureapp.local</code> / <code>Admin@12345</code>
-                </details>
-            </div>
-        </section>
-
-        <!-- Dashboard Section -->
-        <section id="dashboard" class="hidden">
-            <div class="dashboard-top">
-                <div>
-                    <p class="eyebrow">Dashboard</p>
-                    <h2 id="welcome-msg">Your Secure Notes</h2>
-                    <p class="subtitle" id="notes-count">Loading notes...</p>
-                </div>
-                <button id="new-note-btn" class="btn btn-primary">
-                    <span>+</span> New Note
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-view="overview">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    <span class="nav-label">Overview</span>
                 </button>
-            </div>
+                <button class="nav-item" data-view="documents">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span class="nav-label">Documents</span>
+                </button>
+                <button class="nav-item" data-view="security">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    <span class="nav-label">Security</span>
+                </button>
+                <button class="nav-item hidden" id="nav-admin" data-view="admin">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    <span class="nav-label">Administration</span>
+                </button>
+            </nav>
 
-            <div id="admin-panel" class="card admin-panel hidden">
-                <div class="admin-header">
-                    <span class="admin-icon">⚡</span>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="avatar" id="sidebar-avatar">U</div>
                     <div>
-                        <h3>Admin Panel</h3>
-                        <p class="subtitle">View all notes across users</p>
+                        <div id="sidebar-email" class="sidebar-email"></div>
+                        <span id="sidebar-role" class="badge"></span>
                     </div>
                 </div>
-                <button id="admin-fetch-btn" class="btn btn-outline">Load All Notes</button>
-                <div id="admin-results" class="admin-results"></div>
+                <button id="logout-btn" class="btn btn-secondary btn-sm btn-block">Sign Out</button>
             </div>
+        </aside>
 
-            <div id="note-form-card" class="card note-form-card hidden">
-                <h3 id="note-form-title">New Note</h3>
-                <form id="note-form">
-                    <input type="hidden" id="note-id">
-                    <div class="form-group">
-                        <label for="note-title">Title</label>
-                        <input type="text" id="note-title" required maxlength="200" placeholder="Note title">
+        <div class="main-area">
+            <header class="topbar">
+                <div>
+                    <p class="breadcrumb" id="breadcrumb">Dashboard / Overview</p>
+                    <h1 id="page-title">Overview</h1>
+                </div>
+                <div class="topbar-actions">
+                    <span class="session-badge"><span class="status-dot"></span> Session Active</span>
+                    <button id="topbar-new-note" class="btn btn-primary btn-sm hidden">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        New Document
+                    </button>
+                </div>
+            </header>
+
+            <div class="main-content">
+                <!-- Overview View -->
+                <div id="view-overview" class="view active">
+                    <div class="welcome-banner">
+                        <div>
+                            <h2 id="welcome-msg">Welcome back</h2>
+                            <p class="subtitle">Your secure workspace is ready. All documents are encrypted at rest.</p>
+                        </div>
+                        <button class="btn btn-primary" id="overview-new-note">Create Document</button>
                     </div>
-                    <div class="form-group">
-                        <label for="note-content">
-                            Content
-                            <span class="encrypted-badge">🔒 Encrypted at rest</span>
-                        </label>
-                        <textarea id="note-content" rows="6" maxlength="5000" placeholder="Write your secure note here..."></textarea>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon stat-icon-blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                            <div><span class="stat-label">Total Documents</span><span class="stat-value" id="stat-notes">0</span></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon stat-icon-green"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+                            <div><span class="stat-label">Encryption</span><span class="stat-value stat-sm">Fernet AES</span></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon stat-icon-purple"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                            <div><span class="stat-label">Authentication</span><span class="stat-value stat-sm">JWT Active</span></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon stat-icon-amber"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                            <div><span class="stat-label">Your Role</span><span class="stat-value stat-sm" id="stat-role">user</span></div>
+                        </div>
                     </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Save Note</button>
-                        <button type="button" id="cancel-note-btn" class="btn btn-ghost">Cancel</button>
+
+                    <div class="overview-grid">
+                        <div class="card">
+                            <div class="card-header"><h3>Recent Documents</h3><button class="link-btn" data-goto="documents">View all</button></div>
+                            <div id="recent-notes" class="recent-list"><p class="subtitle">Loading...</p></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><h3>Account</h3></div>
+                            <dl class="account-info">
+                                <dt>Email</dt><dd id="account-email">—</dd>
+                                <dt>Member since</dt><dd id="account-since">—</dd>
+                                <dt>Access level</dt><dd id="account-role">—</dd>
+                                <dt>Auth method</dt><dd id="account-auth">Email &amp; Password</dd>
+                            </dl>
+                        </div>
                     </div>
-                </form>
+                </div>
+
+                <!-- Documents View -->
+                <div id="view-documents" class="view">
+                    <div id="note-form-card" class="card note-form-card hidden">
+                        <div class="card-header">
+                            <h3 id="note-form-title">New Document</h3>
+                            <span class="encrypted-badge">Encrypted at rest</span>
+                        </div>
+                        <form id="note-form">
+                            <input type="hidden" id="note-id">
+                            <div class="form-group">
+                                <label for="note-title">Title</label>
+                                <input type="text" id="note-title" required maxlength="200" placeholder="Document title">
+                            </div>
+                            <div class="form-group">
+                                <label for="note-content">Content</label>
+                                <textarea id="note-content" rows="8" maxlength="5000" placeholder="Write your document content..."></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">Save Document</button>
+                                <button type="button" id="cancel-note-btn" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div><h3>All Documents</h3><p class="subtitle" id="notes-count">—</p></div>
+                            <button id="new-note-btn" class="btn btn-primary btn-sm">+ New Document</button>
+                        </div>
+                        <div id="notes-list" class="notes-grid"></div>
+                    </div>
+                </div>
+
+                <!-- Security View -->
+                <div id="view-security" class="view">
+                    <div class="card">
+                        <h3>Security Architecture</h3>
+                        <p class="subtitle section-gap">Industry-standard controls protecting your workspace</p>
+                        <div class="security-grid">
+                            <div class="security-item"><strong>JWT Authentication</strong><span>Short-lived access tokens with refresh rotation</span></div>
+                            <div class="security-item"><strong>OAuth 2.0</strong><span>Google federated identity integration</span></div>
+                            <div class="security-item"><strong>Role-Based Access</strong><span>Granular user and administrator permissions</span></div>
+                            <div class="security-item"><strong>SQL Injection Prevention</strong><span>SQLAlchemy ORM parameterized queries</span></div>
+                            <div class="security-item"><strong>Data Encryption</strong><span>Fernet symmetric encryption at rest</span></div>
+                            <div class="security-item"><strong>Password Security</strong><span>bcrypt hashing with complexity policy</span></div>
+                            <div class="security-item"><strong>Rate Limiting</strong><span>Brute-force protection on auth endpoints</span></div>
+                            <div class="security-item"><strong>Security Headers</strong><span>CSP, HSTS, X-Frame-Options, nosniff</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin View -->
+                <div id="view-admin" class="view">
+                    <div class="card admin-panel">
+                        <div class="card-header">
+                            <div><h3>Administration Console</h3><p class="subtitle">Cross-tenant document metadata</p></div>
+                            <button id="admin-fetch-btn" class="btn btn-secondary btn-sm">Refresh Records</button>
+                        </div>
+                        <div id="admin-results" class="admin-table-wrap"></div>
+                    </div>
+                </div>
+
+                <div id="dashboard-error" class="alert alert-error hidden"></div>
             </div>
-
-            <div id="notes-list" class="notes-grid"></div>
-            <div id="dashboard-error" class="alert alert-error hidden"></div>
-        </section>
-
-        <!-- Security Info (visible when logged out) -->
-        <section id="security-info" class="card security-info">
-            <h3>Security Features</h3>
-            <div class="security-grid">
-                <div class="security-item"><span class="sec-icon">🔑</span><strong>JWT Auth</strong><span>Access + refresh tokens</span></div>
-                <div class="security-item"><span class="sec-icon">🌐</span><strong>OAuth 2.0</strong><span>Google sign-in</span></div>
-                <div class="security-item"><span class="sec-icon">👤</span><strong>RBAC</strong><span>User & admin roles</span></div>
-                <div class="security-item"><span class="sec-icon">🛡</span><strong>SQL Injection</strong><span>SQLAlchemy ORM</span></div>
-                <div class="security-item"><span class="sec-icon">🔐</span><strong>Encryption</strong><span>Fernet at rest</span></div>
-                <div class="security-item"><span class="sec-icon">#</span><strong>Password Hash</strong><span>bcrypt</span></div>
-                <div class="security-item"><span class="sec-icon">⏱</span><strong>Rate Limiting</strong><span>Flask-Limiter</span></div>
-                <div class="security-item"><span class="sec-icon">📋</span><strong>Security Headers</strong><span>CSP, HSTS, X-Frame</span></div>
-            </div>
-        </section>
-    </main>
+        </div>
+    </div>
 
     <div id="toast-container" class="toast-container"></div>
-
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>

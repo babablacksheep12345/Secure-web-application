@@ -97,7 +97,7 @@ def admin_list_all_notes(current_user):
                 "id": note.id,
                 "title": note.title,
                 "owner_email": owner.email if owner else "unknown",
-                "updated_at": note.updated_at.isoformat(),
+                "updated_at": note.updated_at.isoformat() if note.updated_at else "",
             }
         )
     return jsonify({"notes": result, "requested_by": current_user.email})
