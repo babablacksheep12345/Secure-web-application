@@ -48,10 +48,14 @@ def register():
 @auth_bp.route("/login", methods=["POST"])
 def login():
     data = request.get_json(silent=True) or {}
-    email = data.get("email", "").strip().lower()
+    email = data.get("email", "")
     password = data.get("password", "")
 
-    user = User.query.filter_by(email=email).first()
+    valid, result = validate_email_address(email)
+    if not valid:
+        return jsonify({"error": "Invalid email or password"}), 401
+
+    user = User.query.filter_by(email=result).first()
     if not user or not user.check_password(password):
         return jsonify({"error": "Invalid email or password"}), 401
 
